@@ -9,7 +9,7 @@ export const purgeSASS = async ({content, scss}:props) => {
 
     let purgeResult = await new PurgeCSS().purge({
         content: content,
-        css: compileSassFiles(scss).map(s => ({raw: s})) ,
+        css: compileSassFiles(scss) ,
         rejected: true
     })
     console.log(purgeResult)
