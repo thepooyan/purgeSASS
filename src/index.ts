@@ -1,17 +1,13 @@
 import { PurgeCSS } from "purgecss"
-import { compileSassFiles } from "./util"
+import { compileSassFiles, findUnusedSelectors } from "./util"
 
-interface props {
+export interface props {
     content: string[]
     scss: string[]
 }
-export const purgeSASS = async ({content, scss}:props) => {
+export const purgeSASS = async (props:props) => {
 
-    let purgeResult = await new PurgeCSS().purge({
-        content: content,
-        css: compileSassFiles(scss) ,
-        rejected: true
-    })
+    let purgeResult = await findUnusedSelectors(props)
     console.log(purgeResult)
 }
 
