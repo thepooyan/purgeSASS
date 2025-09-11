@@ -1,3 +1,6 @@
+@use "../components/component";
+@use "../components/mixins" as m;
+
 .folan {
     background-color: red;
 
@@ -9,9 +12,14 @@
             display: block;
         }
     }
+
+    @include m.unusedMixin()
 }
 
 
 .some {
     color: blue;
 }
+
+
+@include m.unusedMixin()

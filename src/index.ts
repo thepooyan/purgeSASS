@@ -12,4 +12,4 @@ export const purgeSASS = async (props:props) => {
 }
 
 
-purgeSASS({content: ["./test/*.html"], scss: ["./test/*.scss"]})
+purgeSASS({content: ["./test/*.html"], scss: ["./test/mainStyles/*.scss"]})
