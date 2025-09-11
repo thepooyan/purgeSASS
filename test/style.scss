@@ -2,9 +2,16 @@
     background-color: red;
 
     .test {
-        .unused {}
+        .unused {
+            color: red;
+        }
         p {
             display: block;
         }
     }
+}
+
+
+.some {
+    color: blue;
 }
