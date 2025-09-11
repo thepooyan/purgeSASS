@@ -6,7 +6,7 @@ import path from "path"
 
 export const compileSassFiles = (files: string[]) => {
     let fileNames = globSync(files)
-    return fileNames.map(f => ({raw: sass.compile(f).css, name: f}) )
+    return fileNames.map(f => ({raw: sass.compile(f).css, name: f, extension: "css"}) )
 }
 export const readFilesFromPattern = (pattern:string) => {
     const files = globSync(pattern)
@@ -14,11 +14,10 @@ export const readFilesFromPattern = (pattern:string) => {
 }
 export const readFilesFromPatterns = (patterns: string[]) => patterns.map(readFilesFromPattern).flat()
 
-interface rawCSS {name: string, raw: string}
-interface rawFile {extension: string, raw: string}
+interface rawFile {extension: string, raw: string, name: string}
 interface rawProps {
     rawContent: rawFile[]
-    rawCss: rawCSS[]
+    rawCss: rawFile[]
 }
 export const findUnusedSelectors = async ({rawContent, rawCss}:rawProps) => {
     return await new PurgeCSS().purge({
