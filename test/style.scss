@@ -1,0 +1,10 @@
+.folan {
+    background-color: red;
+
+    .test {
+        .unused {}
+        p {
+            display: block;
+        }
+    }
+}
