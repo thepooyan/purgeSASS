@@ -11,7 +11,9 @@
   },
   "dependencies": {
     "@types/glob": "^9.0.0",
+    "@types/madge": "^5.0.3",
     "glob": "^11.0.3",
+    "madge": "^8.0.0",
     "postcss": "^8.5.6",
     "postcss-scss": "^4.0.9",
     "purgecss": "^7.0.2",

@@ -1,4 +1,5 @@
 import {globSync} from "glob"
+import madge from "madge"
 import fs from "fs"
 import * as sass from "sass"
 import { PurgeCSS } from "purgecss"
@@ -27,6 +28,12 @@ export const findUnusedSelectors = async ({rawContent, rawCss}:rawProps) => {
     })
 }
 
-export const mapSassImports = () => {}
+export const mapSassImports = async (sassGlobs: string[]) => {
+    const files = sassGlobs.map(g => globSync(g)).flat()
+    console.log(files)
+    const result = await madge(".", {fileExtensions: ["scss"]});
+    const dependencyMap = result.obj();
+    console.log(dependencyMap)
+}
 
 export const traceSelectorToOrigin = () => {}

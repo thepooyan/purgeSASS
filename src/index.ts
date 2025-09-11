@@ -10,9 +10,9 @@ export const purgeSASS = async (props:props) => {
 
 
     let purgeResult = await findUnusedSelectors({rawContent: contentFiles, rawCss: compiledSass})
-    mapSassImports()
+    mapSassImports(props.scss)
     traceSelectorToOrigin()
-    console.log(purgeResult)
+    // console.log(purgeResult)
 }
 
 
