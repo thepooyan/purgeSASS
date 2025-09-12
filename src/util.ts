@@ -7,16 +7,29 @@ import path from "path"
 
 export const compileSassFiles = (files: string[]) => {
     let fileNames = (globSync(files))
-    return fileNames.map(f => ({raw: sass.compile(f).css, name: f, extension: "css"}) )
+    console.warn = () => {}  // no-op
+    return fileNames.map((f,i) => {
+        logOnThousand(`Compiled ${i}/${fileNames.length} Sass files. (${files})`, i)
+        return {raw: compileSass(f).css, name: f, extension: "css"}
+    } )
 }
+const compileSass = (fileName: string) => sass.compile(fileName, {logger: {warn: () => {}}} )
+
 export const readFilesFromPattern = (pattern:string) => {
     const files = globSync(pattern)
-    return files.map(f => ({raw: readCachedFile(f), name: f, extension: path.extname(f)}))
+    return files.map((f,i) => {
+        logOnThousand(`Read ${i}/${files.length} files... ${pattern}`,i)
+        return {raw: readCachedFile(f), name: f, extension: path.extname(f)}
+    })
 }
 export const readFilesFromPatterns = (patterns: string[]) => patterns.map(readFilesFromPattern).flat()
 
 export const standardPath = (pathname:string) => path.join(process.cwd(), pathname)
 export const standardPaths = (pathnames:string[]) => pathnames.map(standardPath)
+
+const logOnThousand = (text:string, index:number) => {
+    if (index % 1000 === 0) console.log(text)
+}
 
 export interface rawFile {extension: string, raw: string, name: string}
 export interface rawProps {
