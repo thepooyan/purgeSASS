@@ -12,11 +12,13 @@
   "dependencies": {
     "@types/glob": "^9.0.0",
     "@types/madge": "^5.0.3",
+    "@types/sass-graph": "^2.1.7",
     "glob": "^11.0.3",
     "madge": "^8.0.0",
     "postcss": "^8.5.6",
     "postcss-scss": "^4.0.9",
     "purgecss": "^7.0.2",
-    "sass": "^1.92.1"
+    "sass": "^1.92.1",
+    "sass-graph": "^4.0.1"
   }
 }
