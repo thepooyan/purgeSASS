@@ -6,7 +6,7 @@ import * as sass from "sass"
 import path from "path"
 
 export const compileSassFiles = (files: string[]) => {
-    let fileNames = standardPaths(globSync(files))
+    let fileNames = (globSync(files))
     return fileNames.map(f => ({raw: sass.compile(f).css, name: f, extension: "css"}) )
 }
 export const readFilesFromPattern = (pattern:string) => {

@@ -1,4 +1,4 @@
-import { findUnusedSelectors, mapSassImports, traceSelectorToOrigin } from "./mainFunctions"
+import { findUnusedSelectors, mapSassImports, traceSelectorToOrigin as analyzeAndPurge } from "./mainFunctions"
 import { compileSassFiles, readFilesFromPatterns } from "./util"
 
 export interface props {
@@ -12,8 +12,8 @@ export const purgeSASS = async (props:props) => {
 
     let purgeResult = await findUnusedSelectors({rawContent: contentFiles, rawCss: compiledSass})
     let dependencyGraph = await mapSassImports(props.scss)
-    let folan = traceSelectorToOrigin(purgeResult, dependencyGraph)
+    analyzeAndPurge(purgeResult, dependencyGraph)
 }
 
 
-purgeSASS({content: ["./test/*.html"], scss: ["./test/mainStyles/*.scss"]})
+purgeSASS({content: ["D://testproj/*.html"], scss: ["D://testproj/mainStyles/*.scss"]})
