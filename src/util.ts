@@ -13,7 +13,7 @@ export const compileSassFiles = (files: string[]) => {
 }
 export const readFilesFromPattern = (pattern:string) => {
     const files = globSync(pattern)
-    return files.map(f => ({raw: fs.readFileSync(f, "utf-8"), name: f, extension: path.extname(f)}))
+    return files.map(f => ({raw: readCachedFile(f), name: f, extension: path.extname(f)}))
 }
 export const readFilesFromPatterns = (patterns: string[]) => patterns.map(readFilesFromPattern).flat()
 
@@ -41,17 +41,57 @@ export const mapSassImports = async (sassGlobs: string[]) => {
 type finalResult = {
     filename: string,
     selectors: string[]
-    originFile: string
+    originFile: string | null
 }[]
     
 export const traceSelectorToOrigin = (purgeResult: ResultPurge[], dependencyGraph: DependencyGraph) => {
-    for (const result of purgeResult) {
-        let dep = dependencyGraph.get(result.file || "")
-        console.log(dep)
-        console.log(result.rejected)
+    let result:finalResult = []
+    for (const unused of purgeResult) {
+        if (!unused.rejected) continue
+        if (!unused.file) continue
+        let deps = dependencyGraph.get(unused.file || "")
+        if (!deps) { //File has no dependcies, all unused selectors are in root
+            purgeSassSelectorsFromFile(unused.file, unused.rejected)
+            continue
+        }
+        //file has dependencies, read them and assign 
+        for (const dep of deps) {
+            purgeSassSelectorsFromFile(dep, unused.rejected)
+        }
+        purgeSassSelectorsFromFile(unused.file, unused.rejected)
     }
 }
 
+const listSassSelectors = (sassContent: string) => {
+    let process = new postcss.Processor().process(sassContent, {syntax: postcss_scss})
+    process.root.walkRules(rule => {
+
+    })
+}
+
+const newFileCacher = () => {
+    let map = new Map<string, string>()
+
+    return (filename: string) => {
+        let get = map.get(filename) 
+        if (get) return get
+        let fileContent = readFile(filename)
+        map.set(filename, fileContent)
+        return fileContent
+    }
+}
+
+const readFile = (path: string) => {
+    return fs.readFileSync(path, "utf-8")
+}
+
+export const readCachedFile = newFileCacher()
+
+export const purgeSassSelectorsFromFile = (scssPath:string, targetSelectors: string[]) => {
+    let content = readCachedFile(scssPath)
+    let newContent = purgeSassSelectors(content, targetSelectors)
+    fs.writeFileSync(scssPath, newContent, "utf-8")
+}
 
 export const purgeSassSelectors = (scssCode: string, targetSelectors: string[]) => {
     const root = new postcss.Processor().process(scssCode, { syntax: postcss_scss })
