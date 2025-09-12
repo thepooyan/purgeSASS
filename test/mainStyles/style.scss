@@ -5,20 +5,12 @@
     background-color: red;
 
     .test {
-        .unused {
-            color: red;
-        }
         p {
             display: block;
         }
     }
 
     @include m.unusedMixin()
-}
-
-
-.some {
-    color: blue;
 }
 
 

@@ -1,4 +1,5 @@
-import { compileSassFiles, findUnusedSelectors, mapSassImports, readFilesFromPatterns, traceSelectorToOrigin } from "./util"
+import { findUnusedSelectors, mapSassImports, traceSelectorToOrigin } from "./mainFunctions"
+import { compileSassFiles, readFilesFromPatterns } from "./util"
 
 export interface props {
     content: string[]
