@@ -3,19 +3,29 @@
   "module": "index.ts",
   "type": "module",
   "bin": {
-    "sassPurger": ""
+    "sassPurger": "./dist/cli.js"
   },
+  "main": "./dist/index.js",
   "private": true,
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "typescript": "^5.9.2"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
   },
   "peerDependencies": {
     "typescript": "^5"
   },
   "scripts": {
-    "build": "bun build ./src/index.ts --outdir dist --target=bun && bun build ./src/cli.ts --outdir dist --target=bun"
+    "build": "tsc && bun build ./src/index.ts --outdir dist --target=bun && bun build ./src/cli.ts --outdir dist --target=bun"
   },
-  "engines": {"node": ">=18"},
+  "engines": {
+    "node": ">=18"
+  },
   "dependencies": {
     "@types/glob": "^9.0.0",
     "@types/madge": "^5.0.3",
