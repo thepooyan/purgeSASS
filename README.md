@@ -25,11 +25,11 @@ npm install purgesass
 Run the purger with:
 
 ```ts
-import { purgesass } from "purgesass";
+import { purgeSASS } from "purgesass";
 
 const projectRoot = "path/to/your/project";  
 
-purgesass({ content: [
+purgeSASS({ content: [
   `${projectRoot}/src/html/**/*.{html,js,jsx,tsx,cshtml}`,
 ],
  scss: [
