@@ -4,9 +4,9 @@ A lightweight tool to automatically **purge unused CSS rules directly inside you
 
 This project combines:
 
-* [postcss](https://postcss.org/) – CSS manipilation tool with js
-* [css-purge](https://www.npmjs.com/package/css-purge) – CSS rule cleaner  
-* [glob](https://www.npmjs.com/package/glob) – File pattern matching
+* [postcss](https://github.com/postcss/postcss) – CSS manipilation tool with js
+* [purgeCSS](https://github.com/FullHuman/purgecss) – CSS rule cleaner  
+* [glob](https://github.com/isaacs/node-glob) – File pattern matching
 
 With these, it scans your project, detects which selectors are actually used, and removes the rest — at the **Sass source level**, not just the compiled CSS.
 
