@@ -10,14 +10,14 @@ This project combines:
 
 With these, it scans your project, detects which selectors are actually used, and removes the rest — at the **Sass source level**, not just the compiled CSS.
 
-The npm package for this tool is purgeSASS.
+The npm package for this tool is purgesass.
 
 ## **📦 Installation**
 
 Install the package directly from npm:
 
 ```
-npm install purgeSASS
+npm install purgesass
 ```
 
 ## **⚡ Usage**
@@ -25,11 +25,11 @@ npm install purgeSASS
 Run the purger with:
 
 ```ts
-import { purgeSASS } from "purgeSASS";
+import { purgesass } from "purgesass";
 
 const projectRoot = "path/to/your/project";  
 
-purgeSASS({ content: [
+purgesass({ content: [
   `${projectRoot}/src/html/**/*.{html,js,jsx,tsx,cshtml}`,
 ],
  scss: [
@@ -81,7 +81,7 @@ After purge (if only .btn-primary is used):
 ## **⚠️ Caveats**
 
 * **Dynamic class names** (e.g., className={\\btn-${type}\`}\`) may not be detected automatically. You can whitelist them manually.  
-* **Algorithm** cannot detect classnames inside sass mixins. unused selectors inside mixins cannot be detected.  
+* Algorithm **cannot** detect classnames inside sass mixins. unused selectors inside mixins cannot be detected.  
 * Run on a clean Git branch to prevent losing code unintentionally.  
 * Purging directly modifies Sass files. Make sure you have version control enabled.
 
