@@ -4,32 +4,36 @@ import postcss from "postcss"
 import fs from "fs"
 import * as sass from "sass"
 import path from "path"
+import type { ResultPurge } from "purgecss"
+import type { Ioptions } from "."
 
-export const compileSassFiles = (files: string[]) => {
-    let fileNames = (globSync(files))
-    console.warn = () => {}  // no-op
-    return fileNames.map((f,i) => {
-        logOnThousand(`Compiled ${i}/${fileNames.length} Sass files. (${files})`, i)
-        return {raw: compileSass(f).css, name: f, extension: "css"}
-    } )
+export const utilContext = (log: ReturnType<typeof newLogger>) => {
+
+    const compileSassFiles = (files: string[]) => {
+        let fileNames = (globSync(files))
+        return fileNames.map((f,i) => {
+            log.onThousand(`Compiled ${i}/${fileNames.length} Sass files. (${files})`, i)
+            return {raw: compileSass(f).css, name: f, extension: "css"}
+        })
+    }
+
+    const readFilesFromPattern = (pattern:string ) => {
+        const files = globSync(pattern)
+        return files.map((f,i) => {
+            log.onThousand(`Read ${i}/${files.length} files... ${pattern}`,i)
+            return {raw: readCachedFile(f), name: f, extension: path.extname(f)}
+        })
+    }
+    const readFilesFromPatterns = (patterns: string[]) => patterns.map(readFilesFromPattern).flat()
+
+    return {readFilesFromPattern, readFilesFromPatterns, compileSassFiles }
 }
-const compileSass = (fileName: string) => sass.compile(fileName, {logger: {warn: () => {}}} )
 
-export const readFilesFromPattern = (pattern:string) => {
-    const files = globSync(pattern)
-    return files.map((f,i) => {
-        logOnThousand(`Read ${i}/${files.length} files... ${pattern}`,i)
-        return {raw: readCachedFile(f), name: f, extension: path.extname(f)}
-    })
-}
-export const readFilesFromPatterns = (patterns: string[]) => patterns.map(readFilesFromPattern).flat()
 
+export const compileSass = (fileName: string) => sass.compile(fileName, {logger: {warn: () => {}}} )
 export const standardPath = (pathname:string) => path.join(process.cwd(), pathname)
 export const standardPaths = (pathnames:string[]) => pathnames.map(standardPath)
 
-const logOnThousand = (text:string, index:number) => {
-    if (index % 1000 === 0) console.log(text)
-}
 
 export interface rawFile {extension: string, raw: string, name: string}
 export interface rawProps {
@@ -93,4 +97,33 @@ export const purgeSassSelectorsFromFile = (scssPath:string, targetSelectors: str
     let content = readCachedFile(scssPath)
     let newContent = purgeSassSelectors(content, targetSelectors)
     fs.writeFileSync(scssPath, newContent, "utf-8")
+}
+
+export const cleanResult = (purgeResult: ResultPurge[]) => {
+    return purgeResult
+        .filter(f => (f.rejected?.length || 0) > 0)
+        .map(m => ({...m, 
+            rejected: m.rejected?.map(r => r.replaceAll("\n", "").trim())
+        }))
+
+}
+
+export const prepareResultToLog = (purgeResult: ResultPurge[]) => {
+    return purgeResult
+        .map(p => ({
+            file: p.file,
+            unused_selectors: {
+                count: p.rejected?.length || 0,
+                items: p.rejected
+            }
+        }))
+}
+
+export const newLogger = ({enabled, logfile, logDevices}: Ioptions["log"]) => {
+    const log = (content: any) => enabled && logDevices.includes("console") && console.log(content)
+    log.file = (content: string) => enabled && logDevices.includes("logfile") && fs.writeFileSync(logfile, content, "utf-8")
+    log.onThousand = (text:string, index:number) => {
+        if (index % 1000 === 0) log(text)
+    }
+    return log
 }
