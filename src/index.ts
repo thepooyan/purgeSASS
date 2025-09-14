@@ -1,5 +1,5 @@
 import { findUnusedSelectors, mapSassImports, traceSelectorToOrigin as analyzeAndPurge } from "./mainFunctions"
-import { deepMerge, type DeepPartial } from "./options"
+import { deepMerge, handleOptions, type DeepPartial } from "./options"
 import { compileSassFiles, readFilesFromPatterns } from "./util"
 import fs from "fs"
 
@@ -20,8 +20,7 @@ const defaultOptions:Ioptions = {
     }
 }
 
-export const purgeSASS = async (props:props, options: DeepPartial<Ioptions> = {}) => {
-    let mergedOptions = deepMerge<Ioptions>(defaultOptions, options);
+export const purgeSASS = handleOptions(defaultOptions , async (props:props, options) => {
     
     const contentFiles = readFilesFromPatterns(props.content)
 
@@ -40,7 +39,7 @@ export const purgeSASS = async (props:props, options: DeepPartial<Ioptions> = {}
     let dependencyGraph = mapSassImports(props.scss)
     analyzeAndPurge(purgeResult, dependencyGraph)
 
-    mergedOptions.log.enabled && fs.writeFileSync(mergedOptions.log.logfile, JSON.stringify(purgeResult), "utf-8")
+    options.log.enabled && fs.writeFileSync(options.log.logfile, JSON.stringify(purgeResult), "utf-8")
 
     console.log("Done!")
-}
+})

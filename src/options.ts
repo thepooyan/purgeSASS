@@ -20,3 +20,10 @@ export function deepMerge<T>(target: T, source: DeepPartial<T>): T {
     }
     return result as T
 }
+
+export function handleOptions<T,P>(defaultOpts: T, action: (props: P, options: T) => void) {
+  return (props: P, options?: DeepPartial<T>) => {
+    const finalOptions = options ? deepMerge(defaultOpts, options) : defaultOpts;
+    action(props, finalOptions);
+  };
+}
