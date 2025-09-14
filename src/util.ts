@@ -119,9 +119,9 @@ export const prepareResultToLog = (purgeResult: ResultPurge[]) => {
         }))
 }
 
-export const newLogger = ({enabled, logfile, logDevices}: Ioptions["log"]) => {
-    const log = (content: any) => enabled && logDevices.includes("console") && console.log(content)
-    log.file = (content: string) => enabled && logDevices.includes("logfile") && fs.writeFileSync(logfile, content, "utf-8")
+export const newLogger = ({file, logfile}: Ioptions["log"]) => {
+    const log = (content: any) => console.log(content)
+    log.file = (content: string) => file && fs.writeFileSync(logfile, content, "utf-8")
     log.onThousand = (text:string, index:number) => {
         if (index % 1000 === 0) log(text)
     }

@@ -8,16 +8,14 @@ interface props {
 }
 export interface Ioptions {
     log: {
-        enabled: boolean
+        file: boolean
         logfile: string
-        logDevices: ("console" | "logfile")[]
     }
 }
 const defaultOptions:Ioptions = {
     log: {
-        enabled: false,
+        file: false,
         logfile: "./Unused_SASS_Log.json",
-        logDevices: ["console"]
     }
 }
 
@@ -42,7 +40,7 @@ export const purgeSASS = handleOptions(defaultOptions , async (props:props, opti
     log(`Found ${cleanedResult.reduce((p,c) => c.rejected?.length || 0 + p, 0)} unused selectors across ${purgeResult.length} files.`)
     log(resultLog)
     log.file(
-        JSON.stringify(resultLog)
+        JSON.stringify(resultLog, null, 1)
     )
 
     // let dependencyGraph = mapSassImports(props.scss)
