@@ -85,6 +85,18 @@ After purge (if only .btn-primary is used):
 * Run on a clean Git branch to prevent losing code unintentionally.  
 * Purging directly modifies Sass files. Make sure you have version control enabled.
 
+## **Options**
+
+you can pass the options as the second argument to the function.
+
+```ts
+purgeSASS({content: ["..."], scss: ["..."]}, options)
+```
+
+1. log:
+- `option.log.file: booean`: saves the list of unused selectors and recpective files in json fromat.
+- `option.log.logFile: string`: name and path to the json log file.
+
 ## **📜 License**
 
 MIT License © 2025 Pooyan Salmani
