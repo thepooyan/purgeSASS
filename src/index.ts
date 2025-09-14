@@ -1,7 +1,7 @@
 import { findUnusedSelectors, mapSassImports, traceSelectorToOrigin as analyzeAndPurge } from "./mainFunctions"
 import { compileSassFiles, readFilesFromPatterns } from "./util"
 
-export interface props {
+interface props {
     content: string[]
     scss: string[]
 }
@@ -21,15 +21,6 @@ export const purgeSASS = async (props:props) => {
     console.log(purgeResult.map(p => ({file: p.file, count: p.rejected?.length || 0}) ))
 
     let dependencyGraph = await mapSassImports(props.scss)
-    // analyzeAndPurge(purgeResult, dependencyGraph)
+    analyzeAndPurge(purgeResult, dependencyGraph)
     console.log("Done!")
 }
-
-
-const proj = "F:/Abbas/Projecct/Projecct/TahlilProject"
-export const contentGlob = `${proj}/TahlildadehMVC/**/*.{js,html,cshtml}`
-export const databaseGlog = `D:/Pooyan/td content from database/r/**/*.html`
-export const cssGlob = `${proj}/TahlildadehMVC/Content/**/*.scss`
-export const adminCssGlob2 = `${proj}/TahlildadehMVC/ContentAdmin/**/*.scss`
-
-purgeSASS({content: [contentGlob, databaseGlog], scss: [cssGlob, adminCssGlob2]})
