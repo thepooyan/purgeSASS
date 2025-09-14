@@ -12,9 +12,8 @@ export const findUnusedSelectors = async ({rawContent, rawCss}:rawProps) => {
     })
 }
 
-export const mapSassImports = (sassGlobs: string[]) => {
-    const files = sassGlobs.map(g => globSync(g)).flat()
-    return analyzeSassDependencies(files)
+export const mapSassImports = (sassFiles: string[]) => {
+    return analyzeSassDependencies(sassFiles)
 }   
 
 export const traceSelectorToOrigin = (purgeResult: ResultPurge[], dependencyGraph: DependencyGraph) => {

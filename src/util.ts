@@ -121,7 +121,7 @@ export const prepareResultToLog = (purgeResult: ResultPurge[]) => {
 
 export const newLogger = ({file, logfile}: Ioptions["log"]) => {
     const log = (content: any) => console.log(content)
-    log.file = (content: string) => file && fs.writeFileSync(logfile, content, "utf-8")
+    log.file = (content: string, logfileSub?: string) => file && fs.writeFileSync(logfileSub || logfile, content, "utf-8")
     log.onThousand = (text:string, index:number) => {
         if (index % 1000 === 0) log(text)
     }

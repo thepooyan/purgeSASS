@@ -89,3 +89,10 @@ export function analyzeSassDependencies(entryFiles: string[]): DependencyGraph {
 
   return graph;
 }
+
+export const MapStringify = (map: Map<any,any>) => JSON.stringify(
+  Array.from(
+    map.entries()
+  )
+  , null, 1
+)

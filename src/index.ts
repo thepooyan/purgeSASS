@@ -1,4 +1,5 @@
-import { findUnusedSelectors } from "./mainFunctions"
+import { MapStringify } from "./graph"
+import { findUnusedSelectors, mapSassImports } from "./mainFunctions"
 import { handleOptions } from "./options"
 import { cleanResult, newLogger, prepareResultToLog, utilContext } from "./util"
 
@@ -43,8 +44,12 @@ export const purgeSASS = handleOptions(defaultOptions , async (props:props, opti
         JSON.stringify(resultLog, null, 1)
     )
 
-    // let dependencyGraph = mapSassImports(props.scss)
+    let dependencyGraph = mapSassImports(cleanedResult.map(c => c.file!))
     // analyzeAndPurge(purgeResult, dependencyGraph)
+    log.file(
+        MapStringify(dependencyGraph),
+        "dependency_graph.json"
+    )
 
 
     log("Done!")
