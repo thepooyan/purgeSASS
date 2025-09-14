@@ -1,3 +1,6 @@
+# test folder
+/test
+
 # dependencies (bun install)
 node_modules
 

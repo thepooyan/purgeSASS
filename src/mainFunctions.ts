@@ -12,7 +12,7 @@ export const findUnusedSelectors = async ({rawContent, rawCss}:rawProps) => {
     })
 }
 
-export const mapSassImports = async (sassGlobs: string[]) => {
+export const mapSassImports = (sassGlobs: string[]) => {
     const files = sassGlobs.map(g => globSync(g)).flat()
     return analyzeSassDependencies(files)
 }   

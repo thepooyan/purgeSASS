@@ -18,9 +18,9 @@ export const purgeSASS = async (props:props) => {
 
     let purgeResult = await findUnusedSelectors({rawContent: contentFiles, rawCss: compiledSass})
     console.log(`Found ${purgeResult.reduce((p,c) => c.rejected?.length || 0 + p, 0)} unused selectors across ${purgeResult.length} files.`)
-    console.log(purgeResult.map(p => ({file: p.file, count: p.rejected?.length || 0}) ))
+    console.log(purgeResult.filter(p => p.rejected?.length).map(p => ({file: p.file, count: p.rejected?.length}) ))
 
-    let dependencyGraph = await mapSassImports(props.scss)
+    let dependencyGraph = mapSassImports(props.scss)
     analyzeAndPurge(purgeResult, dependencyGraph)
     console.log("Done!")
 }
