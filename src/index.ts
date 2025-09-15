@@ -39,9 +39,9 @@ export const purgeSASS = handleOptions(defaultOptions , async (props:props, opti
     let resultLog = prepareResultToLog(cleanedResult)
 
     log(`Found ${cleanedResult.reduce((p,c) => c.rejected?.length || 0 + p, 0)} unused selectors across ${purgeResult.length} files.`)
-    log.file(
-        JSON.stringify(resultLog, null, 1)
-    )
+    // log.file(
+    //     JSON.stringify(resultLog, null, 1)
+    // )
 
     let dependencyGraph = mapSassImports(cleanedResult.map(c => c.file!))
     log("dependency_graph.json created.")
@@ -50,7 +50,10 @@ export const purgeSASS = handleOptions(defaultOptions , async (props:props, opti
         "dependency_graph.json"
     )
 
-    analyzeAndPurge(purgeResult, dependencyGraph)
+    let removedLog = analyzeAndPurge(purgeResult, dependencyGraph)
+    log.file(
+        JSON.stringify(removedLog, null, 1)
+    )
 
     log("Done!")
 })
