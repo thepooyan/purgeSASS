@@ -43,7 +43,7 @@ export const analyzeAndPurge = (purgeResult: ResultPurge[], dependencyGraph: Dep
             console.log(`- ${dep}`)
             let removed = purgeSassSelectorsFromFile(dep, unused.rejected)
             if (removed && removed.length > 0)
-            removedLog.push({filename: dep, removed: removed , sourceFile: unused.file!})
+            removedLog.push({filename: dep, sourceFile: unused.file!, removed: removed})
         }
     }
 
