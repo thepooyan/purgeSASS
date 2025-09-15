@@ -12,7 +12,7 @@ export const utilContext = (log: ReturnType<typeof newLogger>) => {
     const compileSassFiles = (files: string[]) => {
         let fileNames = (globSync(files))
         return fileNames.map((f,i) => {
-            log.onThousand(`Compiled ${i}/${fileNames.length} Sass files. (${files})`, i)
+            log.onThousand(`- Compiled ${i}/${fileNames.length} Sass files. (${files})`, i)
             return {raw: compileSass(f).css, name: f, extension: "css"}
         })
     }
@@ -20,7 +20,7 @@ export const utilContext = (log: ReturnType<typeof newLogger>) => {
     const readFilesFromPattern = (pattern:string ) => {
         const files = globSync(pattern)
         return files.map((f,i) => {
-            log.onThousand(`Read ${i}/${files.length} files... ${pattern}`,i)
+            log.onThousand(`- Loaded ${i}/${files.length} files. ("${pattern}")`,i)
             return {raw: readCachedFile(f), name: f, extension: path.extname(f)}
         })
     }
@@ -127,7 +127,7 @@ export const newLogger = ({file, logfile}: Ioptions["log"]) => {
     const log = (content: any) => console.log(content)
     log.file = (content: string, logfileSub?: string) => file && fs.writeFileSync(logfileSub || logfile, content, "utf-8")
     log.onThousand = (text:string, index:number) => {
-        if (index % 1000 === 0) log(text)
+        if (index % 1000 === 0 && index !== 0) log(text)
     }
     return log
 }

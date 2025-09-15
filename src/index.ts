@@ -26,12 +26,12 @@ export const purgeSASS = handleOptions(defaultOptions , async (props:props, opti
     
     const contentFiles = readFilesFromPatterns(props.content)
 
-    log(`Found ${contentFiles.length} content files.`)
+    log(`Total content files found: ${contentFiles.length}`)
     // log(contentFiles.map(c => c.name))
 
     const compiledSass = compileSassFiles(props.scss)
 
-    log(`Found ${compiledSass.length} Sass files.`)
+    log(`Total sass files Compiled: ${compiledSass.length}`)
     // log(compiledSass.map(c => c.name))
 
     let purgeResult = await findUnusedSelectors({rawContent: contentFiles, rawCss: compiledSass})
