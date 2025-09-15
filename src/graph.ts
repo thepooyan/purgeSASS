@@ -31,6 +31,8 @@ export function analyzeSassDependencies(entryFiles: string[]): DependencyGraph {
       path.resolve(basePath, `${importPath}.scss`),
       // e.g., components/button -> components/_button.scss
       path.resolve(basePath, path.dirname(importPath), `_${path.basename(importPath)}.scss`),
+      // e.g., components/button.scss -> components/_button.scss
+      path.resolve(basePath, path.dirname(importPath), `_${path.basename(importPath)}`),
       // e.g., components/button -> components/button/index.scss
       path.resolve(basePath, importPath, 'index.scss'),
       // e.g., components/button -> components/button/_index.scss
@@ -54,6 +56,7 @@ export function analyzeSassDependencies(entryFiles: string[]): DependencyGraph {
       // Avoid circular dependencies and redundant processing.
       return;
     }
+    // if (filePath === "F:\\Abbas\\Projecct\\Projecct\\TahlilProject\\TahlildadehMVC\\Content\\pages\\kids.scss") debugger
     processedFiles.add(filePath);
     graph.set(filePath, []);
 
