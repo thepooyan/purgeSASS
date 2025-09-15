@@ -59,7 +59,7 @@ export function analyzeSassDependencies(entryFiles: string[]): DependencyGraph {
 
     try {
       const content = fs.readFileSync(filePath, 'utf-8');
-      const importRegex = /^@(?:use|import)\s+['"]([^'"]+)['"]( as .+)?;/gm
+      const importRegex = /@(?:use|import)\s+['"]([^'"]+)['"]( as .+)?;/gm
       let match;
 
       while ((match = importRegex.exec(content)) !== null) {
