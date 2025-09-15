@@ -64,30 +64,25 @@ const readFile = (path: string) => {
 export const readCachedFile = newFileCacher()
 
 const getFullSassSelector = (rule: postcss.Rule) => {
-
     let fullSelector = rule.selector
     let parent = rule.parent
-    let node:postcss.Rule | postcss.AtRule = rule
 
     while (parent && parent.type !== "root") {
         if (parent.type === "rule") {
-            fullSelector = parent.selector + ' ' + fullSelector;
-            node = parent;
-            parent = node.parent;
-        } else if (parent.name === "mixin") {
-            fullSelector = "@mixin" + ' ' + fullSelector;
-            node = parent;
-            parent = node.parent;
+            fullSelector = parent.selector + ' ' + fullSelector
+        } else if (parent.type === "atrule" && parent.name === "mixin") {
+            fullSelector = "@mixin " + fullSelector
         }
+        parent = parent.parent
     }
-  
 
     return fullSelector
 }
-const purgeSassSelectors = (scssCode: string, targetSelectors: string[]) => {
-    const root = new postcss.Processor().process(scssCode, { syntax: postcss_scss })
 
-    root.root.walkRules(rule => {
+const purgeSassSelectors = (scssCode: string, targetSelectors: string[]) => {
+    const root = new postcss.Processor().process(scssCode, { syntax: postcss_scss }).sync().root
+
+    root.walkRules(rule => {
         let fullSelector = getFullSassSelector(rule)
         if (targetSelectors.includes(fullSelector)) rule.remove()
     })
