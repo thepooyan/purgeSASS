@@ -94,9 +94,13 @@ const purgeSassSelectors = (scssCode: string, targetSelectors: string[]) => {
     return root.toString()
 }
 export const purgeSassSelectorsFromFile = (scssPath:string, targetSelectors: string[]) => {
-    let content = readCachedFile(scssPath)
-    let newContent = purgeSassSelectors(content, targetSelectors)
-    fs.writeFileSync(scssPath, newContent, "utf-8")
+    try {
+        let content = readCachedFile(scssPath)
+        let newContent = purgeSassSelectors(content, targetSelectors)
+        fs.writeFileSync(scssPath, newContent, "utf-8")
+    } catch(e) {
+        console.log(`Error purging file: ${scssPath}`, e)
+    }
 }
 
 export const cleanResult = (purgeResult: ResultPurge[]) => {
