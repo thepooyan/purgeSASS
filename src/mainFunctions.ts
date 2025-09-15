@@ -25,15 +25,15 @@ export const analyzeAndPurge = (purgeResult: ResultPurge[], dependencyGraph: Dep
             // console.log({file: unused.file, selectors: unused.rejected})
 
             if (unused.file === "F:\\Abbas\\Projecct\\Projecct\\TahlilProject\\TahlildadehMVC\\Content\\swiper.scss") continue
-            purgeSassSelectorsFromFile(unused.file, unused.rejected)
+            let removed = purgeSassSelectorsFromFile(unused.file, unused.rejected)
             continue
         }
         //file has dependencies, read them and assign 
         console.log(`Removing ${unused.rejected.length} selectors from ${unused.file} and it's children:`)
-        purgeSassSelectorsFromFile(unused.file, unused.rejected)
+        let removed = purgeSassSelectorsFromFile(unused.file, unused.rejected)
         for (const dep of deps) {
             console.log(`- ${dep}`)
-            purgeSassSelectorsFromFile(dep, unused.rejected)
+            let removed = purgeSassSelectorsFromFile(dep, unused.rejected)
         }
     }
 }

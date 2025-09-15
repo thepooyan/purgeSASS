@@ -79,22 +79,28 @@ const getFullSassSelector = (rule: postcss.Rule) => {
     return fullSelector
 }
 
-const purgeSassSelectors = (scssCode: string, targetSelectors: string[]) => {
+const purgeSassSelectors = (scssCode: string, targetSelectors: string[]):[string, string[]] => {
     const root = new postcss.Processor().process(scssCode, { syntax: postcss_scss }).sync().root
+    let removed:string[] = []
 
     root.walkRules(rule => {
         let fullSelector = getFullSassSelector(rule)
-        if (targetSelectors.includes(fullSelector)) rule.remove()
+        if (targetSelectors.includes(fullSelector)) {
+            rule.remove()
+            removed.push(fullSelector)
+        }
     })
-    return root.toString()
+    return [root.toString(), removed]
 }
 export const purgeSassSelectorsFromFile = (scssPath:string, targetSelectors: string[]) => {
     try {
         let content = readCachedFile(scssPath)
-        let newContent = purgeSassSelectors(content, targetSelectors)
+        let [newContent, removedItems] = purgeSassSelectors(content, targetSelectors)
         fs.writeFileSync(scssPath, newContent, "utf-8")
+        return removedItems
     } catch(e) {
         console.log(`Error purging file: ${scssPath}`, e)
+        return null
     }
 }
 
