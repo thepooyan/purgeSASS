@@ -16,7 +16,7 @@ export const mapSassImports = (sassFiles: string[]) => {
 
 export const analyzeAndPurge = (purgeResult: ResultPurge[], dependencyGraph: DependencyGraph) => {
     
-    type folan = {filename: string, removed: Record<string, string[]>}
+    type folan = {filename: string, removed: string[], sourceFile?: string}
     let removedLog: folan[] = []
 
     for (const unused of purgeResult) {
@@ -30,20 +30,20 @@ export const analyzeAndPurge = (purgeResult: ResultPurge[], dependencyGraph: Dep
             if (unused.file === "F:\\Abbas\\Projecct\\Projecct\\TahlilProject\\TahlildadehMVC\\Content\\swiper.scss") continue
             let removed = purgeSassSelectorsFromFile(unused.file, unused.rejected)
             if (removed && removed.length > 0)
-            removedLog.push({filename: unused.file!, removed: { root: removed }})
+            removedLog.push({filename: unused.file!, removed: removed })
             continue
         }
         //file has dependencies, read them and assign 
         console.log(`Removing ${unused.rejected.length} selectors from ${unused.file} and it's children:`)
         let removed = purgeSassSelectorsFromFile(unused.file, unused.rejected)
         if (removed && removed.length > 0)
-        removedLog.push({filename: unused.file!, removed: { root: removed }})
+        removedLog.push({filename: unused.file!, removed:  removed })
 
         for (const dep of deps) {
             console.log(`- ${dep}`)
             let removed = purgeSassSelectorsFromFile(dep, unused.rejected)
             if (removed && removed.length > 0)
-            removedLog.push({filename: unused.file!, removed: { dep: removed }})
+            removedLog.push({filename: dep, removed: removed , sourceFile: unused.file!})
         }
     }
 
