@@ -26,6 +26,7 @@ export function analyzeSassDependencies(entryFiles: string[]): DependencyGraph {
    */
   function resolveSassPath(importPath: string, basePath: string): string | null {
     const potentialPaths = [
+      path.resolve(basePath, importPath),
       // e.g., components/button -> components/button.scss
       path.resolve(basePath, `${importPath}.scss`),
       // e.g., components/button -> components/_button.scss
