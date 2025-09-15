@@ -58,7 +58,8 @@ export function analyzeSassDependencies(entryFiles: string[]): DependencyGraph {
     graph.set(filePath, []);
 
     try {
-      const content = fs.readFileSync(filePath, 'utf-8');
+      const rawContent = fs.readFileSync(filePath, 'utf-8');
+      const content = stripSassComments(rawContent)
       const importRegex = /@(?:use|import)\s+['"]([^'"]+)['"]( as .+)?;/gm
       let match;
 
@@ -97,3 +98,17 @@ export const MapStringify = (map: Map<any,any>) => JSON.stringify(
   )
   , null, 1
 )
+
+
+/**
+ * Strips both single-line (//) and multi-line (/* *&#47;) comments from Sass/CSS content in two steps.
+ * @param sassContent The string content of the Sass file.
+ * @returns The content with all comments removed.
+ */
+export const stripSassComments = (sassContent: string): string => {
+  return sassContent
+    // Step 1: Remove multi-line comments (/* ... */)
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    // Step 2: Remove single-line comments (// ...)
+    .replace(/\/\/.*$/gm, '');
+};
