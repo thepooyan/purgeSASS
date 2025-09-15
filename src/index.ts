@@ -36,7 +36,7 @@ export const purgeSASS = handleOptions(defaultOptions , async (props:props, opti
 
     let purgeResult = await findUnusedSelectors({rawContent: contentFiles, rawCss: compiledSass})
     let cleanedResult = cleanResult(purgeResult)
-    let resultLog = prepareResultToLog(cleanedResult)
+    prepareResultToLog(cleanedResult)
 
     log(`Found ${cleanedResult.reduce((p,c) => c.rejected?.length || 0 + p, 0)} unused selectors across ${purgeResult.length} files.`)
     // log.file(
