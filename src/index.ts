@@ -44,7 +44,7 @@ export const purgeSASS = handleOptions(defaultOptions , async (props:props, opti
     )
 
     let dependencyGraph = mapSassImports(cleanedResult.map(c => c.file!))
-    log("logging graph to file")
+    log("dependency_graph.json created.")
     log.file(
         MapStringify(dependencyGraph),
         "dependency_graph.json"
