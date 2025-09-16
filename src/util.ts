@@ -90,6 +90,7 @@ const purgeSassSelectors = (scssCode: string, targetSelectors: string[]):[string
             selectors.each(selector => {
                 const str = String(selector).trim()
                 let fullSelector = getFullSassSelector(rule, str)
+                fullSelector = fullSelector.replaceAll(" &", "")
                 if (targetSelectors.includes(fullSelector)) {
                     selector.remove()
                     removed.push(fullSelector)
