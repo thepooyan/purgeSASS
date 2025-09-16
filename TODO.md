@@ -9,5 +9,6 @@ logs should be printed only when remove actually happend
 
 
 unhandled edge cases:
-- mixin
-- extend
+- mixin rule
+- extend rule
+- dynamicly generated classnames (for example loops)

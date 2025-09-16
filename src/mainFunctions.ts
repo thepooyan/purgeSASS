@@ -63,6 +63,7 @@ export const compareRemovedAndUnused = (toBeCleaned: ResultPurge[], removed: fol
         console.log(`-- Some unused selectors were detected, but not removed.`)
         console.log(`-- This might be a bug of the program, or an unhandled edge case.`)
         console.log(`-- You can go through the list and delete them manually at "undetected_rules.json"`)
+        console.log(`-- Unhandled edge cases include classnames that are generated via mixins, loops, extends or ?`)
         console.log(`-- If you don't see the log file, enable logs by passing {log: {file: true}} to the function.`)
         console.log(`----------------------------------------`)
         fs.writeFileSync("undetected_rules.json", JSON.stringify(diff, null, 1), "utf-8")
