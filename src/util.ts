@@ -1,4 +1,5 @@
 import {globSync} from "glob"
+import selectorParser from "postcss-selector-parser"
 import postcss_scss from "postcss-scss"
 import postcss from "postcss"
 import fs from "fs"
@@ -63,8 +64,8 @@ const readFile = (path: string) => {
 }
 export const readCachedFile = newFileCacher()
 
-const getFullSassSelector = (rule: postcss.Rule) => {
-    let fullSelector = rule.selector
+const getFullSassSelector = (rule: postcss.Rule, selector: string) => {
+    let fullSelector = selector
     let parent = rule.parent
 
     while (parent && parent.type !== "root") {
@@ -84,10 +85,23 @@ const purgeSassSelectors = (scssCode: string, targetSelectors: string[]):[string
     let removed:string[] = []
 
     root.walkRules(rule => {
-        let fullSelector = getFullSassSelector(rule)
-        if (targetSelectors.includes(fullSelector)) {
+        let modified = false
+        const proccessor = selectorParser(selectors => {
+            selectors.each(selector => {
+                const str = String(selector).trim()
+                let fullSelector = getFullSassSelector(rule, str)
+                if (targetSelectors.includes(fullSelector)) {
+                    selector.remove()
+                    removed.push(fullSelector)
+                    modified = true
+                  }
+
+            })
+        })
+        rule.selector = proccessor.processSync(rule.selector)
+
+        if (!rule.selector.trim()) {
             rule.remove()
-            removed.push(fullSelector)
         }
     })
     return [root.toString(), removed]
