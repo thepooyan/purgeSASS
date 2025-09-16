@@ -6,3 +6,8 @@ log undetected rules like normal logs
 
 
 logs should be printed only when remove actually happend
+
+
+unhandled edge cases:
+- mixin
+- extend
