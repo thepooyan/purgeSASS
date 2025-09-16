@@ -52,13 +52,10 @@ export const analyzeAndPurge = (purgeResult: ResultPurge[], dependencyGraph: Dep
 }
 
 export const compareRemovedAndUnused = (toBeCleaned: ResultPurge[], removed: folan[]) => {
-    const delimiter = "__--__"
-    let allRejected = new Set( toBeCleaned.map(t => t.rejected?.map(tt => `${t.file}${delimiter}${tt}`)).flat().flat() )
-    let allRemoved = new Set( removed.map(m => m.removed.map(mm =>  `${m.sourceFile || m.filename}${delimiter}${mm}`)).flat().flat() )
-    const diff = [...allRejected].filter(a => !allRemoved.has(a || "")).filter(f => f !== undefined).map(a => {
-        let result = a.split(delimiter)
-        return {selector: result[1]!, file: result[0]}
-    })
+    let allRemoved = new Set( removed.map(m => m.removed).flat() )
+
+    const filter1 = toBeCleaned.map(t => ({file: t.file, rejected: t.rejected?.filter(f => !allRemoved.has(f))}))
+    const diff = filter1.filter(f => (f.rejected?.length || 0) > 0)
     
     if (diff.length > 0) {
         console.log(`----------------------------------------`)
@@ -70,5 +67,4 @@ export const compareRemovedAndUnused = (toBeCleaned: ResultPurge[], removed: fol
         console.log(`----------------------------------------`)
         fs.writeFileSync("undetected_rules.json", JSON.stringify(diff, null, 1), "utf-8")
     }
-
 }
