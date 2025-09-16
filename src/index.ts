@@ -50,10 +50,10 @@ export const purgeSASS = handleOptions(defaultOptions , async (props:props, opti
     )
 
     let removedLog = analyzeAndPurge(toBeCleaned, dependencyGraph)
-    log("deleted_selectors_log.json created.")
+    log("deleted_rules.json created.")
     log.file(
         JSON.stringify(removedLog, null, 1),
-        "deleted_selectors_log.json"
+        "deleted_rules.json"
     )
 
     compareRemovedAndUnused(toBeCleaned, removedLog)
