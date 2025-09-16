@@ -104,7 +104,7 @@ export const purgeSassSelectorsFromFile = (scssPath:string, targetSelectors: str
     }
 }
 
-export const cleanResult = (purgeResult: ResultPurge[]) => {
+export const cleanResult = (purgeResult: ResultPurge[]):ResultPurge[] => {
     return purgeResult
         .filter(f => (f.rejected?.length || 0) > 0)
         .map(m => ({...m, 
