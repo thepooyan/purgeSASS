@@ -54,9 +54,7 @@ export const analyzeAndPurge = (purgeResult: ResultPurge[], dependencyGraph: Dep
 export const compareRemovedAndUnused = (toBeCleaned: ResultPurge[], removed: folan[]) => {
     const delimiter = "__--__"
     let allRejected = new Set( toBeCleaned.map(t => t.rejected?.map(tt => `${t.file}${delimiter}${tt}`)).flat().flat() )
-    console.log(allRejected)
     let allRemoved = new Set( removed.map(m => m.removed.map(mm =>  `${m.sourceFile || m.filename}${delimiter}${mm}`)).flat().flat() )
-    console.log(allRemoved)
     const diff = [...allRejected].filter(a => !allRemoved.has(a || "")).filter(f => f !== undefined).map(a => {
         let result = a.split(delimiter)
         return {selector: result[1]!, file: result[0]}
